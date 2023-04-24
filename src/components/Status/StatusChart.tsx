@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Chart from './Chart';
 import ChartNumbers from './ChartNumbers';
-import { IData } from '@/interfaces/Data';
+import { IData } from '@/interfaces/data';
 
 interface Props {
   data: IData[] | null,

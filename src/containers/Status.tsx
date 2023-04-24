@@ -5,7 +5,7 @@ import axios from 'axios';
 import StatusName from '@/components/Status/StatusName';
 import StatusBlocks from '@/components/Status/StatusBlocks';
 import StatusChart from '@/components/Status/StatusChart';
-import { IData, IStats } from '@/interfaces/Data';
+import { IData, IStats } from '@/interfaces/data';
 
 const Status = () => {
   const [uptime, setUptime] = useState(0);

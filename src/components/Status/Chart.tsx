@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { IData } from '@/interfaces/Data';
+import { IData } from '@/interfaces/data';
 
 interface Props {
   data: IData[] | null,
