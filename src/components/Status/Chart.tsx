@@ -22,7 +22,7 @@ const Chart: React.FC<Props> = ({ data, setTime }) => {
       let cursor = 2;
       const points:number[][] = [];
       data.forEach((val) => {
-        points.push([cursor, svgHeight - (svgHeight * val.executionTime) / max + 5]);
+        points.push([cursor, svgHeight - (svgHeight * val.executionTime) / max]);
         cursor += blockWidth;
       });
 

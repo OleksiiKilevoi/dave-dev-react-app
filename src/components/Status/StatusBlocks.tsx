@@ -1,16 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IStats } from '@/interfaces/data';
 
 interface Props {
-  data: {
-    data: {
-      statusCode: number | null;
-      executionTime: number;
-      executionTimeTag: string;
-      createdAt: number;
-    }[],
-    status: number,
-  }[]
+  data: IStats[];
 }
 
 const StatusBlocks:React.FC<Props> = ({
@@ -19,6 +12,7 @@ const StatusBlocks:React.FC<Props> = ({
   <Wrap>
     {data.map((d, index) => (
       d.status ? <Bar key={index} statusNum={d.status} /> : <EmptyBar key={index} />))}
+    {!(data.length) && new Array(90).fill({}).map((a, index) => <EmptyBar key={index} />)}
   </Wrap>
 );
 
