@@ -24,6 +24,7 @@ const Status = () => {
     }).then(({ data }) => {
       setState({
         ...data,
+        data: data.data.reverse(),
       });
     }).catch(() => {
       setState({
