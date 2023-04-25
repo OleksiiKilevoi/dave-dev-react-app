@@ -32,7 +32,7 @@ const StatusChart:React.FC<Props> = ({ data }) => {
 };
 
 const Wrap = styled.div`
-  
+  margin-bottom: 16px;
 `;
 
 const Header = styled.div`

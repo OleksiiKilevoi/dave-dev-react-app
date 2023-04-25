@@ -6,12 +6,15 @@ import StatusName from '@/components/Status/StatusName';
 import StatusBlocks from '@/components/Status/StatusBlocks';
 import StatusChart from '@/components/Status/StatusChart';
 import { IData, IStats } from '@/interfaces/data';
+import StatusDates from '@/components/Status/StatusDates';
 
 const Status = () => {
   const [uptime, setUptime] = useState(0);
+  const [lastDate, setLastDate] = useState<number>();
+  const [days, setDays] = useState<number[]>();
   const [stats, setStats] = useState<IStats[]>([]);
   const [state, setState] = useState({
-    status: 'success',
+    status: 'pending',
     data: [],
   });
   const [chartData, setChartData] = useState<IData[] | null>(null);
@@ -20,18 +23,17 @@ const Status = () => {
     axios.get(`${import.meta.env.VITE_API_URL}?limit=720`, {
     }).then(({ data }) => {
       setState({
-        title: 'API',
         ...data,
+      });
+    }).catch(() => {
+      setState({
+        status: 'error',
+        data: [],
       });
     });
   }, []);
 
-  const getStatus = (arr: {
-    statusCode: number | null;
-    executionTime: number;
-    executionTimeTag: string;
-    createdAt: number;
-  }[]) => {
+  const getStatus = (arr: IData[]) => {
     let successNum = 0;
     let errorsNum = 0;
     arr.forEach((a) => {
@@ -62,12 +64,7 @@ const Status = () => {
       return;
     }
     const arrSize = 720 - state.data.length;
-    const array: {
-      statusCode: number | null;
-      executionTime: number;
-      executionTimeTag: string;
-      createdAt: number;
-    }[] = new Array(arrSize).fill({
+    const array: IData[] = new Array(arrSize).fill({
       statusCode: null,
       executionTime: 0,
       executionTimeTag: 'ms',
@@ -77,26 +74,13 @@ const Status = () => {
       array.push(d);
     });
     setChartData([...array]);
-    const arrayWithChunks: {
-      statusCode: number | null;
-      executionTime: number;
-      executionTimeTag: string;
-      createdAt: number;
-    }[][] = [];
+    const arrayWithChunks: IData[][] = [];
     const chunkSize = 8;
     for (let i = 0; i < array.length; i += chunkSize) {
       const chunk = array.slice(i, i + chunkSize);
       arrayWithChunks.push(chunk);
     }
-    const chartItems: {
-      data: {
-        statusCode: number | null;
-        executionTime: number;
-        executionTimeTag: string;
-        createdAt: number;
-      }[]
-      status: number
-    }[] = [];
+    const chartItems: IStats[] = [];
     arrayWithChunks.forEach((item) => {
       const status = getStatus(item);
       chartItems.push({
@@ -105,7 +89,19 @@ const Status = () => {
       });
     });
     setStats(chartItems);
+    setLastDate(array[array.length - 1].createdAt);
   }, [state]);
+
+  useEffect(() => {
+    if (lastDate) {
+      const daysArray = [];
+      for (let i = 0; i < 7; i += 1) {
+        const newDay = new Date(lastDate);
+        daysArray.unshift(newDay.setDate(new Date(lastDate).getDate() - i));
+      }
+      setDays(daysArray);
+    }
+  }, [lastDate]);
 
   useEffect(() => {
     if (chartData) {
@@ -120,6 +116,7 @@ const Status = () => {
       <StatusName title="API" status={state.status} uptime={uptime} />
       <StatusBlocks data={stats} />
       <StatusChart data={chartData} />
+      <StatusDates days={days} />
     </Wrap>
   );
 };
