@@ -1,0 +1,29 @@
+name: CI 
+on:
+  push:
+    branches:
+      - master
+jobs:
+  master:
+    name: pipeline
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    env:
+      AWS_ACCESS: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+      VITE_API_URL: ${{secrets.VITE_API_URL}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-1'
+      - name: NMP Install
+        run: npm install
+      - name: Build app
+        run: npm run build
+      - name: Sync dist
+        run: npm run deploy
+ 

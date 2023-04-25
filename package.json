@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "aws s3 sync dist/ s3://react-app-davedev"
   },
   "keywords": [],
   "author": "",
