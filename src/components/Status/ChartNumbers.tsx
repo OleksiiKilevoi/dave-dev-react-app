@@ -10,10 +10,8 @@ interface Props {
 const ChartNumbers:React.FC<Props> = ({ data }) => {
   const [numbers, setNumbers] = useState<number[]>([0]);
   const formatNumber = (num: number) => {
-    if (num >= 1000000) {
-      return `${(num / 1000000).toFixed(1)}kk`;
-    } if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}k`;
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(1)}s`;
     }
     return num.toString();
   };
